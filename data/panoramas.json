@@ -1,0 +1,20 @@
+[
+  {
+    "id": "hcm-street-2023-06",
+    "placeId": null,
+    "title": "Panorama đường phố TP. Hồ Chí Minh",
+    "description": "Ảnh toàn cảnh 360° từ Mapillary, chụp tại TP. Hồ Chí Minh. Vị trí ảnh không đại diện cho một địa điểm tham quan cụ thể.",
+    "type": "equirectangular",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e4/Mapillary_%281206214506757191%2C_o8RhGkIP3LW9aMqBTYdnV0%29_%28bemaps_1pd%29_2023-06-01_08H09M08S586.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Mapillary_(1206214506757191,_o8RhGkIP3LW9aMqBTYdnV0)_(bemaps_1pd)_2023-06-01_08H09M08S586.jpg",
+    "licenseName": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "creator": "bemaps_1pd",
+    "creatorUrl": "https://www.mapillary.com/app/?pKey=1206214506757191",
+    "capturedAt": "2023-06-01T08:09:08+07:00",
+    "latitude": 10.78069,
+    "longitude": 106.706832,
+    "width": 4096,
+    "height": 2048
+  }
+]

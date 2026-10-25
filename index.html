@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f7f9fc">
+    <meta
+      name="description"
+      content="Khám phá địa điểm, văn hóa và ẩm thực tại TP. Hồ Chí Minh."
+    >
+    <title>Go to around HCM — Khám phá TP. Hồ Chí Minh</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    >
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/pannellum@2.5.7/build/pannellum.css"
+      integrity="sha384-r9OnhfpOsYbUcBsiA2HDe+U8gpr4hjc6k0a3ClCY7/U6QYh+MugK4+LiX0fHWFpH"
+      crossorigin="anonymous"
+    >
+    <link rel="stylesheet" href="./css/variables.css">
+    <link rel="stylesheet" href="./css/base.css">
+    <link rel="stylesheet" href="./css/layout.css">
+    <link rel="stylesheet" href="./css/components.css">
+    <link rel="stylesheet" href="./css/responsive.css">
+    <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/pannellum@2.5.7/build/pannellum.js" integrity="sha384-ynERiwwVeRMDw4sOcewUSlt3GqiEr7HYphSk4Hh0iDivZBoXpRf7nC6ULoJ9mSxc" crossorigin="anonymous"></script>
+    <script type="module" src="./js/app.js"></script>
+  </head>
+  <body>
+    <svg class="icon-library" aria-hidden="true" focusable="false">
+      <symbol id="icon-pin" viewBox="0 0 24 24">
+        <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"></path>
+        <circle cx="12" cy="10" r="2.5"></circle>
+      </symbol>
+      <symbol id="icon-search" viewBox="0 0 24 24">
+        <circle cx="10.8" cy="10.8" r="6.8"></circle>
+        <path d="m16 16 4.5 4.5"></path>
+      </symbol>
+      <symbol id="icon-close" viewBox="0 0 24 24">
+        <path d="m6 6 12 12M18 6 6 18"></path>
+      </symbol>
+      <symbol id="icon-map" viewBox="0 0 24 24">
+        <path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3V6Z"></path>
+        <path d="M9 3v15m6-12v15"></path>
+      </symbol>
+      <symbol id="icon-list" viewBox="0 0 24 24">
+        <path d="M8 6h13M8 12h13M8 18h13"></path>
+        <circle cx="3.5" cy="6" r=".5"></circle>
+        <circle cx="3.5" cy="12" r=".5"></circle>
+        <circle cx="3.5" cy="18" r=".5"></circle>
+      </symbol>
+      <symbol id="icon-arrow" viewBox="0 0 24 24">
+        <path d="M5 12h14m-6-6 6 6-6 6"></path>
+      </symbol>
+      <symbol id="icon-building" viewBox="0 0 24 24">
+        <path d="M4 21V5l8-3v19m0-13h8v13M2 21h20"></path>
+        <path d="M7 8h2m-2 4h2m-2 4h2m8-2h2m-2 4h2"></path>
+      </symbol>
+      <symbol id="icon-info" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="9"></circle>
+        <path d="M12 11v5m0-8h.01"></path>
+      </symbol>
+      <symbol id="icon-target" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="8"></circle>
+        <circle cx="12" cy="12" r="3"></circle>
+        <path d="M12 2v2m0 16v2M2 12h2m16 0h2"></path>
+      </symbol>
+      <symbol id="icon-swap" viewBox="0 0 24 24">
+        <path d="M7 7h13m0 0-3-3m3 3-3 3M17 17H4m0 0 3-3m-3 3 3 3"></path>
+      </symbol>
+    </svg>
+
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="./index.html" aria-label="Go to around HCM, về trang khám phá">
+          <span class="brand-mark" aria-hidden="true">
+            <svg class="icon"><use href="#icon-pin"></use></svg>
+          </span>
+          <span class="brand-copy">
+            <span class="brand-name">Go to around <strong>HCM</strong></span>
+            <span class="brand-caption">Cùng bạn khám phá thành phố</span>
+          </span>
+        </a>
+
+        <form class="search-form" id="search-form" role="search">
+          <svg class="icon search-icon" aria-hidden="true"><use href="#icon-search"></use></svg>
+          <label class="visually-hidden" for="place-search">Tìm địa điểm</label>
+          <input
+            id="place-search"
+            name="q"
+            type="search"
+            placeholder="Tìm địa điểm, văn hóa, ẩm thực..."
+            autocomplete="off"
+          >
+          <button class="search-clear" id="clear-search" type="button" aria-label="Xóa nội dung tìm kiếm" hidden>
+            <svg class="icon" aria-hidden="true"><use href="#icon-close"></use></svg>
+          </button>
+          <kbd class="search-shortcut" aria-hidden="true">⌕</kbd>
+        </form>
+
+        <nav class="topbar-nav" aria-label="Điều hướng chính">
+          <a class="nav-link nav-link-active" href="#discover" aria-current="page">Khám phá</a>
+          <button class="nav-link nav-button" id="open-admin" type="button" hidden>Quản trị</button>
+        </nav>
+      </header>
+
+      <main class="workspace" id="discover" data-mobile-view="list">
+        <div class="mobile-view-toggle" role="tablist" aria-label="Chọn chế độ xem">
+          <button class="view-tab is-active" id="list-tab" type="button" role="tab" aria-selected="true" aria-controls="place-panel" data-view="list" tabindex="0">
+            <svg class="icon" aria-hidden="true"><use href="#icon-list"></use></svg>
+            Danh sách
+          </button>
+          <button class="view-tab" id="map-tab" type="button" role="tab" aria-selected="false" aria-controls="map-panel" data-view="map" tabindex="-1">
+            <svg class="icon" aria-hidden="true"><use href="#icon-map"></use></svg>
+            Bản đồ
+          </button>
+        </div>
+
+        <aside class="place-panel" id="place-panel" role="tabpanel" aria-labelledby="list-tab">
+          <div class="panel-intro">
+            <p class="eyebrow"><span class="eyebrow-dot"></span> THÀNH PHỐ HỒ CHÍ MINH</p>
+            <h1 id="panel-title">Đi đâu hôm nay?</h1>
+            <p class="panel-description">Tìm một góc quen, khám phá điều mới.</p>
+            <button class="secondary-button panorama-open" id="open-panorama" type="button" aria-haspopup="dialog">
+              Khám phá panorama 360°
+            </button>
+          </div>
+
+          <section class="filter-section" aria-labelledby="filter-title">
+            <div class="section-heading">
+              <h2 id="filter-title">Danh mục</h2>
+              <button class="text-button" id="reset-filters" type="button" hidden>Xóa lọc</button>
+            </div>
+            <div class="filter-list" id="category-filters" aria-label="Lọc địa điểm theo danh mục"></div>
+          </section>
+
+          <details class="route-planner" id="route-planner">
+            <summary>
+              <span class="route-summary-title">Tuyến A → B</span>
+            </summary>
+            <div class="route-planner-content">
+              <p class="route-disclaimer">Nhập địa chỉ xuất phát và điểm đến, hoặc chọn gợi ý địa điểm có sẵn. Đường bộ dùng dịch vụ OSRM/OpenStreetMap để vẽ theo mạng lưới đường và chỉ mang tính tham khảo; hãy kiểm tra điểm đã tìm thấy trên bản đồ. Địa chỉ chưa khớp địa điểm có sẵn sẽ được gửi tới Photon để tìm tọa độ, chỉ giữ tạm trong bộ nhớ phiên và không ghi vào LocalStorage.</p>
+              <form id="route-form">
+                <div class="route-fields">
+                  <label class="route-field" for="route-from">
+                    Điểm xuất phát A
+                    <input id="route-from" name="from" type="text" list="route-place-suggestions" autocomplete="street-address" placeholder="Ví dụ: 12 Nguyễn Huệ, Quận 1" required>
+                  </label>
+                  <label class="route-field" for="route-to">
+                    Điểm đến B
+                    <input id="route-to" name="to" type="text" list="route-place-suggestions" placeholder="Nhập địa chỉ hoặc tên địa điểm" required>
+                  </label>
+                  <label class="route-field" for="route-mode">
+                    Kiểu tuyến
+                    <select id="route-mode" name="mode">
+                      <option value="bus">Xe buýt</option>
+                      <option value="motorbike">Xe máy</option>
+                    </select>
+                  </label>
+                </div>
+                <datalist id="route-place-suggestions"></datalist>
+                <div class="route-actions">
+                  <button class="secondary-button route-swap" id="swap-route" type="button">
+                    <svg class="icon" aria-hidden="true"><use href="#icon-swap"></use></svg>
+                    Đổi A/B
+                  </button>
+                  <button class="primary-button" id="find-route" type="submit">Xem tuyến</button>
+                </div>
+                <button class="text-button route-clear" id="clear-route" type="button">Xóa lựa chọn</button>
+              </form>
+              <div class="route-notice" id="route-notice" role="alert" hidden></div>
+              <section class="route-result" id="route-result" aria-labelledby="route-result-title" hidden>
+                <h3 id="route-result-title">Kết quả tuyến đường</h3>
+                <ol class="route-stops" id="route-stops"></ol>
+                <p class="route-metrics" id="route-metrics"></p>
+                <p class="route-result-note" id="route-result-note"></p>
+              </section>
+            </div>
+          </details>
+
+          <details class="itinerary-planner" id="itinerary-planner">
+            <summary>
+              <span class="route-summary-title">Lịch trình tham quan một ngày</span>
+            </summary>
+            <div class="itinerary-planner-content">
+              <p class="route-disclaimer">Nhập ngân sách và khung giờ rảnh, rồi chọn nhóm muốn ghé. Mọi khoản chi và thời gian đều là dự trù minh họa; giá vé, giá ăn uống và chi tiêu mua sắm thực tế có thể khác.</p>
+              <form id="itinerary-form">
+                <fieldset class="itinerary-interests">
+                  <legend>Muốn kết hợp những mục nào?</legend>
+                  <div class="itinerary-category-list" id="itinerary-categories"></div>
+                </fieldset>
+                <label class="route-field" for="itinerary-budget">
+                  Ngân sách tối đa (VNĐ)
+                  <input
+                    class="itinerary-number-input"
+                    id="itinerary-budget"
+                    name="budget"
+                    type="number"
+                    min="0"
+                    step="10000"
+                    value="500000"
+                    required
+                  >
+                </label>
+                <div class="itinerary-time-fields">
+                  <label class="route-field" for="itinerary-start-time">
+                    Bắt đầu rảnh
+                    <input id="itinerary-start-time" name="startTime" type="time" value="08:00" required>
+                  </label>
+                  <label class="route-field" for="itinerary-end-time">
+                    Hết giờ rảnh
+                    <input id="itinerary-end-time" name="endTime" type="time" value="18:00" required>
+                  </label>
+                </div>
+                <label class="route-field" for="itinerary-start">
+                  Điểm bắt đầu (không bắt buộc)
+                  <select id="itinerary-start" name="start">
+                    <option value="">Tự chọn điểm bắt đầu gần trung tâm</option>
+                  </select>
+                </label>
+                <label class="route-field" for="itinerary-pace">
+                  Nhịp độ tham quan
+                  <select id="itinerary-pace" name="pace">
+                    <option value="relaxed">Thoải mái · tối đa 4 điểm</option>
+                    <option value="balanced" selected>Cân bằng · tối đa 5 điểm</option>
+                    <option value="packed">Nhiều điểm · tối đa 6 điểm</option>
+                  </select>
+                </label>
+                <label class="route-field" for="itinerary-mode">
+                  Phương tiện di chuyển
+                  <select id="itinerary-mode" name="mode">
+                    <option value="bus">Xe buýt</option>
+                    <option value="motorbike">Xe máy</option>
+                  </select>
+                </label>
+                <button class="primary-button itinerary-submit" type="submit">Tạo lịch trình</button>
+              </form>
+              <div class="itinerary-notice" id="itinerary-notice" role="status" hidden></div>
+              <section class="itinerary-result" id="itinerary-result" aria-labelledby="itinerary-result-title" hidden>
+                <h3 id="itinerary-result-title">Gợi ý trong ngày</h3>
+                <p class="itinerary-summary" id="itinerary-summary"></p>
+                <ol class="itinerary-stops" id="itinerary-stops"></ol>
+                <p class="itinerary-choice-note">Có thể đổi điểm dừng. Tuyến đường trên bản đồ sẽ tự tính lại theo thứ tự điểm mới; đó là tuyến đường bộ tham khảo, không phải tuyến xe buýt thực tế.</p>
+                <button class="secondary-button itinerary-map-button" id="show-itinerary-map" type="button">Xem tuyến đường trên bản đồ</button>
+                <p class="itinerary-route-status" id="itinerary-route-status" role="status" aria-live="polite" hidden></p>
+                <p class="itinerary-disclaimer">Dự trù theo nhóm địa điểm: ăn uống 100.000 ₫, mua sắm 150.000 ₫, chợ/khu văn hóa 80.000 ₫, nghệ thuật biểu diễn 100.000 ₫, bảo tàng/di tích 50.000 ₫, công viên 30.000 ₫ mỗi điểm; nhóm còn lại 0 ₫. Đây không phải giá vé, báo giá món ăn hay khoản mua hàng thực tế. Chi phí di chuyển cũng là ước tính.</p>
+              </section>
+            </div>
+          </details>
+
+          <section class="personal-tools" aria-label="Tùy chọn cá nhân">
+            <div class="collection-panel">
+              <div class="collection-header">
+                <h2>Yêu thích</h2>
+              </div>
+              <div class="mini-list" id="favorites-list"></div>
+            </div>
+            <div class="collection-panel">
+              <div class="collection-header">
+                <h2>Lịch sử xem</h2>
+              </div>
+              <div class="mini-list" id="history-list"></div>
+            </div>
+            <div class="review-panel" id="review-panel">
+              <div class="collection-header">
+                <h2>Đánh giá nhanh</h2>
+              </div>
+              <p class="review-selected" id="review-selected">Chọn địa điểm để lưu sao đánh giá nhanh trên trình duyệt này.</p>
+              <div class="rating-stars" id="rating-stars" aria-label="Đánh giá địa điểm"></div>
+            </div>
+          </section>
+
+          <div class="results-heading">
+            <h2>Danh sách địa điểm</h2>
+            <span class="result-count" id="result-count" aria-live="polite">Đang tải…</span>
+          </div>
+          <p class="data-note">
+            <svg class="icon" aria-hidden="true"><use href="#icon-info"></use></svg>
+            Giờ mở cửa và dịch vụ có thể thay đổi; vui lòng kiểm tra trước khi ghé thăm.
+          </p>
+
+          <div class="notice" id="app-notice" role="alert" hidden></div>
+          <div class="place-list" id="place-list" aria-live="polite" aria-busy="true"></div>
+          <div class="empty-state" id="empty-state" hidden>
+            <span class="empty-icon" aria-hidden="true">
+              <svg class="icon"><use href="#icon-search"></use></svg>
+            </span>
+            <h3>Chưa tìm thấy địa điểm</h3>
+            <p>Thử từ khóa khác hoặc chọn một danh mục khác nhé.</p>
+            <button class="secondary-button" id="empty-reset" type="button">Xóa tìm kiếm và bộ lọc</button>
+          </div>
+
+          <footer class="panel-footer">
+            <span>Thông tin hiển thị có thể chưa đầy đủ.</span>
+            <a href="https://dinhdoclap.gov.vn/lien-he/" target="_blank" rel="noreferrer" id="source-link" hidden>
+              Nguồn dữ liệu <span aria-hidden="true">↗</span>
+            </a>
+          </footer>
+        </aside>
+
+        <section class="map-panel" id="map-panel" role="tabpanel" aria-labelledby="map-tab">
+          <div class="map-actions" aria-label="Điều khiển bản đồ">
+            <button class="map-action-button" id="fit-map" type="button">
+              <svg class="icon" aria-hidden="true"><use href="#icon-map"></use></svg>
+              Xem các địa điểm
+            </button>
+            <button class="map-action-button" id="locate-user" type="button">
+              <svg class="icon" aria-hidden="true"><use href="#icon-target"></use></svg>
+              Vị trí của tôi
+            </button>
+          </div>
+          <div id="map" class="interactive-map" role="application" aria-label="Bản đồ địa điểm tại TP. Hồ Chí Minh"></div>
+          <div class="map-route-summary" id="map-route-summary" aria-live="polite" hidden>
+            <span class="map-route-label" id="map-route-label">TUYẾN THAM KHẢO</span>
+            <strong id="map-route-stops"></strong>
+            <span id="map-route-metrics"></span>
+            <span class="map-route-note" id="map-route-note"></span>
+          </div>
+          <div class="map-notice" id="map-notice" role="status" hidden></div>
+        </section>
+      </main>
+
+      <dialog class="panorama-dialog" id="panorama-dialog" aria-labelledby="panorama-title">
+        <div class="panorama-dialog-content">
+          <header class="panorama-dialog-header">
+            <div>
+              <p class="eyebrow">KHÁM PHÁ 360°</p>
+              <h2 id="panorama-title">Panorama TP. Hồ Chí Minh</h2>
+              <p class="panorama-instructions">Kéo để xoay góc nhìn; dùng điều khiển trên ảnh để phóng to hoặc toàn màn hình.</p>
+              <p class="panorama-description" id="panorama-description"></p>
+            </div>
+            <button class="secondary-button panorama-close" id="close-panorama" type="button">Đóng</button>
+          </header>
+          <label class="panorama-picker" id="panorama-picker" for="panorama-select" hidden>
+            Chọn ảnh toàn cảnh
+            <select id="panorama-select"></select>
+          </label>
+          <div class="panorama-viewer-shell">
+            <div class="panorama-viewer" id="panorama-viewer" role="application" aria-label="Trình xem ảnh panorama 360 độ"></div>
+            <p class="panorama-status" id="panorama-status" role="status" aria-live="polite">Đang tải panorama…</p>
+          </div>
+          <div class="panorama-attribution" id="panorama-attribution"></div>
+        </div>
+      </dialog>
+
+      <dialog class="place-detail-dialog" id="place-detail-dialog" aria-labelledby="place-detail-title">
+        <article class="place-detail-content">
+          <header class="place-detail-header">
+            <div>
+              <p class="eyebrow" id="place-detail-category"></p>
+              <h2 id="place-detail-title"></h2>
+            </div>
+            <button class="secondary-button place-detail-close" id="close-place-detail" type="button">Đóng</button>
+          </header>
+
+          <figure class="place-detail-photo" id="place-detail-photo" hidden>
+            <button
+              class="place-detail-photo-open"
+              id="place-detail-photo-open"
+              type="button"
+              aria-label="Mở ảnh địa điểm kích thước lớn"
+            >
+              <img id="place-detail-photo-image" alt="" loading="lazy" decoding="async">
+            </button>
+            <figcaption class="place-detail-photo-caption" id="place-detail-photo-caption"></figcaption>
+          </figure>
+          <p class="place-detail-description" id="place-detail-description"></p>
+          <dl class="place-detail-facts" id="place-detail-facts"></dl>
+          <section class="place-detail-sources-section" id="place-detail-sources-section" aria-labelledby="place-detail-sources-title">
+            <h3 id="place-detail-sources-title">Nguồn thông tin</h3>
+            <div class="place-detail-sources" id="place-detail-sources"></div>
+          </section>
+          <section class="place-reviews" aria-labelledby="place-reviews-title">
+            <header class="place-reviews-header">
+              <div>
+                <h3 id="place-reviews-title">Đánh giá từ khách tham quan</h3>
+                <p class="place-reviews-local-note">Đánh giá được lưu trên trình duyệt này, chưa đồng bộ với người khác.</p>
+              </div>
+              <p class="place-review-summary" id="place-review-summary"></p>
+            </header>
+            <form class="place-review-form" id="place-review-form">
+              <label class="place-review-label" for="place-review-author">Tên hiển thị <span>(không bắt buộc)</span></label>
+              <input id="place-review-author" name="author" type="text" maxlength="40" autocomplete="nickname" placeholder="Khách tham quan">
+              <fieldset class="place-review-rating">
+                <legend>Chấm điểm <span aria-hidden="true">*</span></legend>
+                <div class="place-review-stars" id="place-review-stars" role="group" aria-label="Chọn số sao">
+                  <button type="button" data-score="1" aria-label="1 sao" aria-pressed="false">★</button>
+                  <button type="button" data-score="2" aria-label="2 sao" aria-pressed="false">★</button>
+                  <button type="button" data-score="3" aria-label="3 sao" aria-pressed="false">★</button>
+                  <button type="button" data-score="4" aria-label="4 sao" aria-pressed="false">★</button>
+                  <button type="button" data-score="5" aria-label="5 sao" aria-pressed="false">★</button>
+                </div>
+              </fieldset>
+              <label class="place-review-label" for="place-review-text">Nhận xét</label>
+              <textarea id="place-review-text" name="review" rows="4" minlength="3" maxlength="1000" required placeholder="Chia sẻ trải nghiệm của bạn về địa điểm này..."></textarea>
+              <p class="place-review-status" id="place-review-status" role="status" aria-live="polite" hidden></p>
+              <button class="primary-button place-review-submit" type="submit">Gửi đánh giá</button>
+            </form>
+            <div class="place-review-list" id="place-review-list" aria-live="polite"></div>
+          </section>
+          <div class="place-detail-actions">
+            <button class="secondary-button" id="place-detail-favorite" type="button"></button>
+            <button class="secondary-button" id="place-detail-panorama" type="button">Xem góc nhìn 360°</button>
+            <button class="secondary-button" id="place-detail-image" type="button">Xem ảnh địa điểm</button>
+            <button class="primary-button" id="place-detail-map" type="button">Xem trên bản đồ</button>
+            <a class="secondary-button place-detail-external-map" id="place-detail-external-map" target="_blank" rel="noopener noreferrer" hidden>
+              Kiểm tra góc nhìn đường phố
+            </a>
+          </div>
+          <p class="place-detail-media-note" id="place-detail-media-note" hidden></p>
+        </article>
+      </dialog>
+
+      <dialog class="place-image-dialog" id="place-image-dialog" aria-labelledby="place-image-title">
+        <div class="place-image-dialog-content">
+          <header class="panorama-dialog-header">
+            <div>
+              <p class="eyebrow">ẢNH ĐỊA ĐIỂM</p>
+              <h2 id="place-image-title"></h2>
+            </div>
+            <button class="secondary-button panorama-close" id="close-place-image" type="button">Đóng</button>
+          </header>
+          <figure class="place-image-figure">
+            <img id="place-image-preview" alt="" referrerpolicy="no-referrer">
+            <figcaption id="place-image-caption"></figcaption>
+          </figure>
+          <p class="place-image-error" id="place-image-error" role="status" hidden></p>
+          <div class="place-image-source" id="place-image-source"></div>
+        </div>
+      </dialog>
+
+      <dialog class="admin-dialog" id="admin-dialog" aria-labelledby="admin-title" hidden>
+        <div class="admin-dialog-content">
+          <header class="admin-dialog-header">
+            <div>
+              <p class="eyebrow">QUẢN TRỊ</p>
+              <h2 id="admin-title">Dữ liệu địa điểm cục bộ</h2>
+            </div>
+            <button class="secondary-button admin-close" id="close-admin" type="button">Đóng</button>
+          </header>
+
+          <div class="admin-layout">
+            <aside class="admin-sidebar">
+              <div class="admin-toolbar">
+                <button class="primary-button" id="admin-add-new" type="button">Thêm địa điểm</button>
+                <button class="secondary-button" id="admin-restore-default" type="button">Khôi phục ban đầu</button>
+              </div>
+              <ul class="admin-list" id="admin-list" aria-live="polite"></ul>
+            </aside>
+
+            <form class="admin-form" id="admin-form">
+              <div class="field-grid">
+                <label>
+                  ID địa điểm
+                  <input id="admin-id" name="id" type="text" required>
+                </label>
+                <label>
+                  Tên địa điểm
+                  <input id="admin-name" name="name" type="text" required>
+                </label>
+                <label>
+                  Danh mục
+                  <input id="admin-category" name="category" type="text" required>
+                </label>
+                <label>
+                  Trạng thái
+                  <select id="admin-status" name="verificationStatus">
+                    <option value="candidate">candidate</option>
+                    <option value="partially-verified">partially-verified</option>
+                    <option value="verified">verified</option>
+                  </select>
+                </label>
+                <label class="full-width">
+                  Địa chỉ
+                  <input id="admin-address" name="address" type="text">
+                </label>
+                <label>
+                  Vĩ độ
+                  <input id="admin-latitude" name="latitude" type="number" step="0.000001">
+                </label>
+                <label>
+                  Kinh độ
+                  <input id="admin-longitude" name="longitude" type="number" step="0.000001">
+                </label>
+                <label class="full-width">
+                  Nguồn tọa độ
+                  <input id="admin-coordinate-url" name="coordinateSourceUrl" type="url">
+                </label>
+                <label class="full-width">
+                  Tags
+                  <input id="admin-tags" name="tags" type="text" placeholder="Ví dụ: lịch sử, di tích">
+                </label>
+                <label class="full-width">
+                  Ghi chú
+                  <textarea id="admin-notes" name="verificationNotes" rows="4"></textarea>
+                </label>
+              </div>
+
+              <div class="admin-form-actions">
+                <button class="primary-button" id="admin-save" type="submit">Lưu thay đổi</button>
+                <button class="secondary-button" id="admin-delete" type="button">Xóa địa điểm</button>
+                <button class="text-button" id="admin-reset-form" type="button">Nhập mới</button>
+              </div>
+              <p class="admin-notice" id="admin-notice" role="status" hidden></p>
+            </form>
+          </div>
+        </div>
+      </dialog>
+    </div>
+  </body>
+</html>

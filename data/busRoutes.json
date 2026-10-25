@@ -1,0 +1,74 @@
+[
+  {
+    "id": "demo-central-heritage",
+    "fromPlaceId": "dinh-doc-lap",
+    "toPlaceId": "nha-hat-thanh-pho",
+    "stopPlaceIds": [
+      "dinh-doc-lap",
+      "cong-vien-tao-dan",
+      "cho-ben-thanh",
+      "nha-hat-thanh-pho"
+    ],
+    "allowsReverse": true,
+    "fareVnd": 7000,
+    "durationMinutes": 22,
+    "simulationNote": "Tuyến, điểm dừng, giá và thời gian đều là dữ liệu giả lập. Đường màu xanh có khúc rẽ minh họa giữa các điểm dừng, không bám theo đường phố hay tuyến xe buýt thực tế."
+  },
+  {
+    "id": "demo-landmark-to-market",
+    "fromPlaceId": "landmark-81",
+    "toPlaceId": "cho-ben-thanh",
+    "stopPlaceIds": [
+      "landmark-81",
+      "thao-cam-vien-sai-gon",
+      "nha-hat-thanh-pho",
+      "cho-ben-thanh"
+    ],
+    "allowsReverse": true,
+    "fareVnd": 10000,
+    "durationMinutes": 35,
+    "simulationNote": "Tuyến, điểm dừng, giá và thời gian đều là dữ liệu giả lập. Đường màu xanh có khúc rẽ minh họa giữa các điểm dừng, không bám theo đường phố hay tuyến xe buýt thực tế."
+  },
+  {
+    "id": "demo-park-to-cathedral",
+    "fromPlaceId": "cong-vien-van-hoa-dam-sen",
+    "toPlaceId": "nha-tho-duc-ba-sai-gon",
+    "stopPlaceIds": [
+      "cong-vien-van-hoa-dam-sen",
+      "thao-cam-vien-sai-gon",
+      "nha-tho-duc-ba-sai-gon"
+    ],
+    "allowsReverse": true,
+    "fareVnd": 12000,
+    "durationMinutes": 41,
+    "simulationNote": "Tuyến giữa một điểm thiên nhiên và một điểm kiến trúc nổi bật chỉ để minh họa. Thời gian, giá, điểm dừng và đường màu xanh có khúc rẽ đều là giả lập, không bám theo đường phố thực tế."
+  },
+  {
+    "id": "demo-city-center-to-bell-tower",
+    "fromPlaceId": "cho-ben-thanh",
+    "toPlaceId": "buu-dien-trung-tam-sai-gon",
+    "stopPlaceIds": [
+      "cho-ben-thanh",
+      "dinh-doc-lap",
+      "buu-dien-trung-tam-sai-gon"
+    ],
+    "allowsReverse": true,
+    "fareVnd": 6500,
+    "durationMinutes": 18,
+    "simulationNote": "Tuyến ngắn trong trung tâm thành phố chỉ để minh họa. Thời gian, giá, điểm dừng và đường màu xanh có khúc rẽ đều là giả lập, không bám theo đường phố thực tế."
+  },
+  {
+    "id": "demo-skyscraper-to-park",
+    "fromPlaceId": "landmark-81",
+    "toPlaceId": "cong-vien-tao-dan",
+    "stopPlaceIds": [
+      "landmark-81",
+      "nha-hat-thanh-pho",
+      "cong-vien-tao-dan"
+    ],
+    "allowsReverse": true,
+    "fareVnd": 9000,
+    "durationMinutes": 29,
+    "simulationNote": "Tuyến giữa điểm ngắm cảnh cao tầng và công viên trung tâm chỉ để minh họa. Thời gian, giá, điểm dừng và đường màu xanh có khúc rẽ đều là giả lập, không bám theo đường phố thực tế."
+  }
+]
